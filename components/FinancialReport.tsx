@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import type { ScheduleData } from '../types';
-import { DollarSignIcon, PrintIcon } from './Icons';
+import { DollarSignIcon, PrintIcon, PercentIcon } from './Icons';
 
 interface FinancialReportProps {
   scheduleData: ScheduleData;
@@ -11,6 +11,7 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
   const [reportPeriodType, setReportPeriodType] = useState<'monthly' | 'daily'>('monthly');
   const [currentMonth, setCurrentMonth] = useState(`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`);
   const [currentDay, setCurrentDay] = useState(new Date().toISOString().split('T')[0]); // YYYY-MM-DD
+  const [clinicPercentage, setClinicPercentage] = useState<number>(30); // Default 30%
 
   const handlePrint = () => {
     window.print();
@@ -52,15 +53,18 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
         completedAppointments.length > 0
           ? totalRevenue / completedAppointments.length
           : 0;
+          
+      const clinicShare = (totalRevenue * clinicPercentage) / 100;
 
       return {
         ...prof,
         completedCount: completedAppointments.length,
         totalRevenue,
         averageTicket,
+        clinicShare,
       };
     }).sort((a, b) => b.totalRevenue - a.totalRevenue);
-  }, [professionals, filteredAppointments]);
+  }, [professionals, filteredAppointments, clinicPercentage]);
   
   const formatCurrency = (value: number) => {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -89,9 +93,9 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
             <DollarSignIcon className="w-6 h-6 text-green-600"/>
             Faturamento por Profissional
         </h3>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap gap-y-4">
             {/* Report Type Toggle */}
-            <div className="inline-flex rounded-md shadow-sm" role="group">
+            <div className="inline-flex rounded-md shadow-sm mr-2" role="group">
                 <button
                     type="button"
                     onClick={() => setReportPeriodType('monthly')}
@@ -123,6 +127,23 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
                     className="p-2 border border-gray-300 rounded-md"
                 />
             )}
+            
+            <div className="flex items-center gap-2 ml-2">
+                <label htmlFor="clinic-percentage" className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                    % Clínica:
+                </label>
+                <input
+                    type="number"
+                    id="clinic-percentage"
+                    value={clinicPercentage}
+                    onChange={(e) => setClinicPercentage(parseFloat(e.target.value))}
+                    className="w-20 p-2 border border-gray-300 rounded-md text-sm"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                />
+            </div>
+
             <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
                 <PrintIcon className="w-5 h-5"/>
                 <span className="hidden sm:inline">Imprimir Relatório</span>
@@ -150,6 +171,7 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
                         </div>
                         <div className="mt-2 sm:mt-0 text-right">
                              <p className="text-2xl font-bold text-green-700">{formatCurrency(prof.totalRevenue)}</p>
+                             <p className="text-sm text-gray-600">Clínica ({clinicPercentage}%): <span className="font-semibold">{formatCurrency(prof.clinicShare)}</span></p>
                         </div>
                     </div>
                      <div className="mt-4 pt-4 border-t border-gray-200 flex justify-between text-sm text-gray-600">

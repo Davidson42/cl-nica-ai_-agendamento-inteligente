@@ -108,3 +108,9 @@ export const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
     </svg>
 );
+
+export const PercentIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M12 12a3 3 0 11-6 0 3 3 0 016 0zm0 0a3 3 0 106 0 3 3 0 00-6 0z" />
+    </svg>
+);
