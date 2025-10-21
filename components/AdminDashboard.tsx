@@ -14,7 +14,7 @@ interface AdminDashboardProps {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onUpdateNotes: (appointmentId: string, notes: string) => void;
   onUpdateStatus: (appointmentId: string, status: AppointmentStatus) => void;
-  onAddProfessional: (name: string, specialty: string) => void;
+  onAddProfessional: (name: string, specialty: string, consultationPrice: number) => void; // Assinatura atualizada
   onDeleteProfessional: (professionalId: string) => void;
 }
 

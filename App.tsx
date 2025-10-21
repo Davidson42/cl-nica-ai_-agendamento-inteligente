@@ -7,7 +7,7 @@ import AdminDashboard from './components/AdminDashboard';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PatientView from './components/PatientView';
 import { showSuccess, showError } from './utils/toast';
-import { supabase } from './src/services/supabaseService'; // Caminho corrigido
+import { supabase } from '@/src/services/supabaseService'; // Caminho corrigido usando alias
 import AuthForm from './components/AuthForm'; // Import AuthForm
 
 export default function App() {
