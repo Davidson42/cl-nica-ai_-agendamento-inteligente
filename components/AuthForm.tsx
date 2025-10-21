@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../services/supabaseService';
+import { supabase } from '@/src/services/supabaseService'; // Caminho corrigido usando alias
 import { showSuccess, showError, showLoading, updateToast } from '../utils/toast';
 import LoadingSpinner from './LoadingSpinner';
 
