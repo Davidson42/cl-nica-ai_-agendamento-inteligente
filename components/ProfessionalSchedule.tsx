@@ -101,7 +101,7 @@ export default function ProfessionalSchedule({ professional, appointments, onUpd
             <div key={date}>
               <h4 className="font-semibold text-gray-600 bg-gray-100 p-2 rounded-t-md border-b sticky top-0">{date}</h4>
               <ul className="divide-y divide-gray-200">
-                {appts.map((appt: Appointment) => (
+                {appts.map(appt => (
                   <li key={appt.id} className="p-3 hover:bg-gray-50">
                     <div className="flex justify-between items-start gap-4">
                       <div>
