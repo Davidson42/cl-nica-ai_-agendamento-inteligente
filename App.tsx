@@ -126,6 +126,38 @@ export default function App() {
     alert('Perfil atualizado com sucesso!');
   };
 
+  const handleAddProfessional = (name: string, specialty: string) => {
+    setScheduleData(prevData => {
+      const newProfessional: Professional = {
+        id: `prof_${prevData.professionals.length + 1}_${Date.now()}`,
+        name,
+        specialty,
+      };
+      return {
+        ...prevData,
+        professionals: [...prevData.professionals, newProfessional],
+      };
+    });
+    alert(`Profissional ${name} adicionado com sucesso!`);
+  };
+
+  const handleDeleteProfessional = (professionalId: string) => {
+    setScheduleData(prevData => {
+      const updatedProfessionals = prevData.professionals.filter(
+        prof => prof.id !== professionalId
+      );
+      const updatedAppointments = prevData.appointments.filter(
+        appt => appt.professionalId !== professionalId
+      );
+      return {
+        ...prevData,
+        professionals: updatedProfessionals,
+        appointments: updatedAppointments,
+      };
+    });
+    alert('Profissional e suas consultas foram excluídos com sucesso.');
+  };
+
 
   const renderContent = () => {
     if (!userRole) {
@@ -142,6 +174,8 @@ export default function App() {
             setIsLoading={setIsLoading}
             onUpdateNotes={handleUpdateAppointmentNotes}
             onUpdateStatus={handleUpdateAppointmentStatus}
+            onAddProfessional={handleAddProfessional}
+            onDeleteProfessional={handleDeleteProfessional}
           />
         );
       case 'professional':
