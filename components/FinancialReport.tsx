@@ -8,23 +8,34 @@ interface FinancialReportProps {
 
 export default function FinancialReport({ scheduleData }: FinancialReportProps) {
   const { professionals, appointments } = scheduleData;
+  const [reportPeriodType, setReportPeriodType] = useState<'monthly' | 'daily'>('monthly');
   const [currentMonth, setCurrentMonth] = useState(`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`);
+  const [currentDay, setCurrentDay] = useState(new Date().toISOString().split('T')[0]); // YYYY-MM-DD
 
   const handlePrint = () => {
     window.print();
   };
 
-  const { year, month } = useMemo(() => {
-    const [yearStr, monthStr] = currentMonth.split('-');
-    return { year: parseInt(yearStr, 10), month: parseInt(monthStr, 10) };
-  }, [currentMonth]);
+  const { year, month, day } = useMemo(() => {
+    if (reportPeriodType === 'monthly') {
+      const [yearStr, monthStr] = currentMonth.split('-');
+      return { year: parseInt(yearStr, 10), month: parseInt(monthStr, 10), day: undefined };
+    } else { // daily
+      const date = new Date(currentDay);
+      return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+    }
+  }, [currentMonth, currentDay, reportPeriodType]);
 
   const filteredAppointments = useMemo(() => {
     return appointments.filter(appt => {
-        const apptDate = new Date(appt.start);
-        return apptDate.getFullYear() === year && apptDate.getMonth() === month - 1;
+        const apptDate = new Date(Number(appt.start));
+        if (reportPeriodType === 'monthly') {
+            return apptDate.getFullYear() === year && apptDate.getMonth() === month - 1;
+        } else { // daily
+            return apptDate.getFullYear() === year && apptDate.getMonth() === month - 1 && apptDate.getDate() === day;
+        }
     });
-  }, [appointments, year, month]);
+  }, [appointments, year, month, day, reportPeriodType]);
 
   const financialData = useMemo(() => {
     return professionals.map(prof => {
@@ -55,10 +66,21 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
   
-  const formattedMonth = new Date(year, month - 1).toLocaleString('pt-BR', {
-    month: 'long',
-    year: 'numeric'
-  });
+  const formattedPeriod = useMemo(() => {
+    if (reportPeriodType === 'monthly') {
+      return new Date(year, month - 1).toLocaleString('pt-BR', {
+        month: 'long',
+        year: 'numeric'
+      });
+    } else { // daily
+      return new Date(year, month - 1, day).toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+  }, [year, month, day, reportPeriodType]);
 
   return (
     <div className="space-y-6">
@@ -68,12 +90,39 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
             Faturamento por Profissional
         </h3>
         <div className="flex items-center gap-2">
-            <input 
-                type="month"
-                value={currentMonth}
-                onChange={(e) => setCurrentMonth(e.target.value)}
-                className="p-2 border border-gray-300 rounded-md"
-            />
+            {/* Report Type Toggle */}
+            <div className="inline-flex rounded-md shadow-sm" role="group">
+                <button
+                    type="button"
+                    onClick={() => setReportPeriodType('monthly')}
+                    className={`px-4 py-2 text-sm font-medium rounded-l-lg border ${reportPeriodType === 'monthly' ? 'bg-blue-600 text-white border-blue-700' : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-50'}`}
+                >
+                    Mensal
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setReportPeriodType('daily')}
+                    className={`px-4 py-2 text-sm font-medium rounded-r-lg border ${reportPeriodType === 'daily' ? 'bg-blue-600 text-white border-blue-700' : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-50'}`}
+                >
+                    Diário
+                </button>
+            </div>
+
+            {reportPeriodType === 'monthly' ? (
+                <input 
+                    type="month"
+                    value={currentMonth}
+                    onChange={(e) => setCurrentMonth(e.target.value)}
+                    className="p-2 border border-gray-300 rounded-md"
+                />
+            ) : (
+                <input 
+                    type="date"
+                    value={currentDay}
+                    onChange={(e) => setCurrentDay(e.target.value)}
+                    className="p-2 border border-gray-300 rounded-md"
+                />
+            )}
             <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
                 <PrintIcon className="w-5 h-5"/>
                 <span className="hidden sm:inline">Imprimir Relatório</span>
@@ -85,11 +134,11 @@ export default function FinancialReport({ scheduleData }: FinancialReportProps) 
         <div className="hidden print:block mb-8 text-center">
             <h1 className="text-2xl font-bold">Relatório Financeiro</h1>
             <h2 className="text-lg font-semibold text-gray-700">Clínica AI</h2>
-            <p className="text-gray-500">Mês de Referência: {formattedMonth}</p>
+            <p className="text-gray-500">Período de Referência: {formattedPeriod}</p>
         </div>
 
         <p className="text-sm text-gray-500 mb-4 print:hidden">
-            Exibindo dados para <span className="font-semibold">{formattedMonth}</span>. Este relatório considera apenas as consultas com status "Concluído".
+            Exibindo dados para <span className="font-semibold">{formattedPeriod}</span>. Este relatório considera apenas as consultas com status "Concluído".
         </p>
         <div className="space-y-4">
             {financialData.map(prof => (
