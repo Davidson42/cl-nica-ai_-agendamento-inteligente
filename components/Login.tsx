@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import type { UserRole, Professional } from '../types';
 import { AdminIcon, PatientIcon, ProfessionalIcon } from './Icons';
@@ -43,7 +42,7 @@ export default function Login({ onLogin, professionals }: LoginProps) {
       <p className="text-center text-gray-500 mb-8">Selecione seu perfil para continuar.</p>
       <div className="space-y-4">
         <button
-          onClick={() => onLogin('admin')}
+          onClick={() => onLogin('admin')} // Isso agora acionará o AuthForm em App.tsx
           className="w-full flex items-center gap-4 text-left p-4 bg-gray-50 hover:bg-indigo-100 border border-gray-200 rounded-lg transition-all duration-200 transform hover:scale-105"
         >
           <div className="bg-indigo-200 p-3 rounded-full"><AdminIcon className="w-6 h-6 text-indigo-700" /></div>
