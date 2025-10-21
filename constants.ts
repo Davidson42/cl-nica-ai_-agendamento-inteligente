@@ -2,9 +2,9 @@ import type { ScheduleData } from './types';
 
 export const initialScheduleData: ScheduleData = {
   professionals: [
-    { id: 'prof_1', name: 'Dra. Ana Silva', specialty: 'Cardiologia' },
-    { id: 'prof_2', name: 'Dr. João Souza', specialty: 'Fisioterapia' },
-    { id: 'prof_3', name: 'Dr. Carlos Lima', specialty: 'Odontologia' },
+    { id: 'prof_1', name: 'Dra. Ana Silva', specialty: 'Cardiologia', consultationPrice: 250 },
+    { id: 'prof_2', name: 'Dr. João Souza', specialty: 'Fisioterapia', consultationPrice: 150 },
+    { id: 'prof_3', name: 'Dr. Carlos Lima', specialty: 'Odontologia', consultationPrice: 300 },
   ],
   patients: [
     { id: 'pat_1', name: 'Fernanda Lima' },

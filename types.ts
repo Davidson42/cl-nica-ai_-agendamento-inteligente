@@ -6,11 +6,13 @@ export interface Professional {
   id: string;
   name: string;
   specialty: string;
+  consultationPrice?: number; // Adicionado
 }
 
 export interface UpdatableProfessional {
-  name: string;
-  specialty: string;
+  name?: string; // Tornar opcional para permitir atualizações parciais
+  specialty?: string; // Tornar opcional
+  consultationPrice?: number; // Adicionado
 }
 
 export interface Patient {

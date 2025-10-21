@@ -19,10 +19,11 @@ export default function ProfessionalDashboard({ professional, scheduleData, setS
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(professional.name);
   const [editedSpecialty, setEditedSpecialty] = useState(professional.specialty);
+  const [editedConsultationPrice, setEditedConsultationPrice] = useState(professional.consultationPrice || 0);
   
   const handleProfileSave = (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdateProfile(professional.id, { name: editedName, specialty: editedSpecialty });
+    onUpdateProfile(professional.id, { name: editedName, specialty: editedSpecialty, consultationPrice: editedConsultationPrice });
     setIsEditing(false);
   }
 
@@ -79,6 +80,18 @@ export default function ProfessionalDashboard({ professional, scheduleData, setS
                     value={editedSpecialty}
                     onChange={(e) => setEditedSpecialty(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="consultation-price" className="block text-sm font-medium text-gray-700">Valor da Consulta (R$)</label>
+                  <input
+                    type="number"
+                    id="consultation-price"
+                    value={editedConsultationPrice}
+                    onChange={(e) => setEditedConsultationPrice(parseFloat(e.target.value))}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    min="0"
+                    step="0.01"
                   />
                 </div>
               </div>

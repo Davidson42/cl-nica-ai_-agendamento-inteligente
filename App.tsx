@@ -50,12 +50,9 @@ export default function App() {
       }
 
       const professional = prevData.professionals.find(p => p.id === professionalId);
-      let price = 150; // default
-      if (professional) {
-        if (professional.specialty === 'Cardiologia') price = 250;
-        if (professional.specialty === 'Odontologia') price = 300;
-      }
-
+      // Use the professional's consultationPrice if available, otherwise fallback to default logic
+      const price = professional?.consultationPrice || 150; 
+      
       const newAppointment: Appointment = {
         id: `appt_${prevData.appointments.length + 1}_${Date.now()}`,
         professionalId,
@@ -126,12 +123,13 @@ export default function App() {
     alert('Perfil atualizado com sucesso!');
   };
 
-  const handleAddProfessional = (name: string, specialty: string) => {
+  const handleAddProfessional = (name: string, specialty: string, consultationPrice: number) => {
     setScheduleData(prevData => {
       const newProfessional: Professional = {
         id: `prof_${prevData.professionals.length + 1}_${Date.now()}`,
         name,
         specialty,
+        consultationPrice,
       };
       return {
         ...prevData,

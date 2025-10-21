@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 
 interface AddProfessionalModalProps {
-  onAddProfessional: (name: string, specialty: string) => void;
+  onAddProfessional: (name: string, specialty: string, consultationPrice: number) => void;
   onClose: () => void;
 }
 
 export default function AddProfessionalModal({ onAddProfessional, onClose }: AddProfessionalModalProps) {
   const [name, setName] = useState('');
   const [specialty, setSpecialty] = useState('');
+  const [consultationPrice, setConsultationPrice] = useState<number>(0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && specialty.trim()) {
-      onAddProfessional(name, specialty);
+    if (name.trim() && specialty.trim() && consultationPrice > 0) {
+      onAddProfessional(name, specialty, consultationPrice);
       onClose();
     } else {
-      alert('Por favor, preencha todos os campos.');
+      alert('Por favor, preencha todos os campos e insira um valor válido para a consulta.');
     }
   };
 
@@ -45,6 +46,19 @@ export default function AddProfessionalModal({ onAddProfessional, onClose }: Add
                 onChange={(e) => setSpecialty(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
+              />
+            </div>
+            <div>
+              <label htmlFor="consultation-price" className="block text-sm font-medium text-gray-700">Valor da Consulta (R$)</label>
+              <input
+                type="number"
+                id="consultation-price"
+                value={consultationPrice}
+                onChange={(e) => setConsultationPrice(parseFloat(e.target.value))}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
+                min="0"
+                step="0.01"
               />
             </div>
           </div>
