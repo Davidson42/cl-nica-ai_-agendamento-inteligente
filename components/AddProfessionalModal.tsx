@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { showSuccess, showError } from '../utils/toast'; // Importar funções de toast
 
 interface AddProfessionalModalProps {
   onAddProfessional: (name: string, specialty: string, consultationPrice: number) => void;
@@ -16,7 +17,7 @@ export default function AddProfessionalModal({ onAddProfessional, onClose }: Add
       onAddProfessional(name, specialty, consultationPrice);
       onClose();
     } else {
-      alert('Por favor, preencha todos os campos e insira um valor válido para a consulta.');
+      showError('Por favor, preencha todos os campos e insira um valor válido para a consulta.');
     }
   };
 

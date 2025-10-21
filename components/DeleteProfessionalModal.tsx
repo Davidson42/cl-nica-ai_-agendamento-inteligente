@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Professional } from '../types';
+import { showSuccess, showError } from '../utils/toast'; // Importar funções de toast
 
 interface DeleteProfessionalModalProps {
   professionals: Professional[];
@@ -18,7 +19,7 @@ export default function DeleteProfessionalModal({ professionals, onDeleteProfess
         onClose();
       }
     } else {
-      alert('Por favor, selecione um profissional para excluir.');
+      showError('Por favor, selecione um profissional para excluir.');
     }
   };
 

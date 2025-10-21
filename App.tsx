@@ -6,6 +6,7 @@ import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import PatientView from './components/PatientView';
+import { showSuccess, showError } from './utils/toast'; // Importar funções de toast
 
 export default function App() {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
@@ -70,7 +71,7 @@ export default function App() {
         appointments: [...prevData.appointments, newAppointment],
       };
     });
-    alert(`Consulta para ${patientName} agendada com sucesso!`);
+    showSuccess(`Consulta para ${patientName} agendada com sucesso!`);
   };
 
   const handleUpdateAppointmentNotes = (appointmentId: string, notes: string) => {
@@ -83,6 +84,7 @@ export default function App() {
         });
         return { ...prevData, appointments: updatedAppointments };
     });
+    showSuccess('Notas da consulta atualizadas!');
   };
 
   const handleCancelAppointment = (appointmentId: string) => {
@@ -95,7 +97,7 @@ export default function App() {
       });
       return { ...prevData, appointments: updatedAppointments };
     });
-    alert('Consulta cancelada com sucesso.');
+    showSuccess('Consulta cancelada com sucesso.');
   };
 
   const handleUpdateAppointmentStatus = (appointmentId: string, status: AppointmentStatus) => {
@@ -108,6 +110,7 @@ export default function App() {
       });
       return { ...prevData, appointments: updatedAppointments };
     });
+    showSuccess('Status da consulta atualizado!');
   };
 
   const handleUpdateProfessionalProfile = (professionalId: string, data: UpdatableProfessional) => {
@@ -120,7 +123,7 @@ export default function App() {
       });
       return { ...prevData, professionals: updatedProfessionals };
     });
-    alert('Perfil atualizado com sucesso!');
+    showSuccess('Perfil atualizado com sucesso!');
   };
 
   const handleAddProfessional = (name: string, specialty: string, consultationPrice: number) => {
@@ -136,7 +139,7 @@ export default function App() {
         professionals: [...prevData.professionals, newProfessional],
       };
     });
-    alert(`Profissional ${name} adicionado com sucesso!`);
+    showSuccess(`Profissional ${name} adicionado com sucesso!`);
   };
 
   const handleDeleteProfessional = (professionalId: string) => {
@@ -153,7 +156,7 @@ export default function App() {
         appointments: updatedAppointments,
       };
     });
-    alert('Profissional e suas consultas foram excluídos com sucesso.');
+    showSuccess('Profissional e suas consultas foram excluídos com sucesso.');
   };
 
 

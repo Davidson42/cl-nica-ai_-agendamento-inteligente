@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import type { Professional, Appointment } from '../types';
 import { generateCalendarDays, getAvailableTimeSlots } from '../utils/calendar';
 import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
+import { showError } from '../utils/toast'; // Importar showError
 
 interface CalendarSchedulerProps {
   professional: Professional;
@@ -59,7 +60,7 @@ export default function CalendarScheduler({ professional, appointments, onBookAp
       setSelectedTime(null);
       // We keep the selectedDate to show the updated schedule
     } else {
-      alert('Por favor, insira o nome do paciente.');
+      showError('Por favor, insira seu nome completo para agendar.');
     }
   };
 
